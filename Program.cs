@@ -22,27 +22,27 @@ app.UseStaticFiles();
 
 app.MapGet("/", () => "Witaj w API Kursów!");
 
-app.MapGet("/kursy", async () => await ReadJsonFile<Kurs>("kursy.json"));
+app.MapGet("/kursy", async () => await ReadJsonFile("kursy.json", new List<Kurs>()));
 app.MapPost("/kursy", async (Kurs kurs) => await SaveToJsonFile("kursy.json", kurs));
-app.MapGet("/uczestnicy", async () => await ReadJsonFile<Uczestnik>("uczestnicy.json"));
+app.MapGet("/uczestnicy", async () => await ReadJsonFile("uczestnicy.json", new List<Uczestnik>()));
 app.MapPost("/uczestnicy", async (Uczestnik uczestnik) => await SaveToJsonFileWithId("uczestnicy.json", uczestnik, currentData => currentData.Max(u => u.Id)));
 
 app.Run();
 
-async Task<List<T>> ReadJsonFile<T>(string filePath) where T : new()
+async Task<List<T>> ReadJsonFile<T>(string filePath, List<T> defaultValue)
 {
     if (!File.Exists(filePath))
     {
-        return new List<T>();
+        return defaultValue;
     }
 
     var json = await File.ReadAllTextAsync(filePath);
-    return JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
+    return JsonSerializer.Deserialize<List<T>>(json) ?? defaultValue;
 }
 
 async Task SaveToJsonFile<T>(string filePath, T data)
 {
-    var currentData = await ReadJsonFile<T>(filePath);
+    var currentData = await ReadJsonFile(filePath, new List<T>());
     currentData.Add(data);
     var json = JsonSerializer.Serialize(currentData, new JsonSerializerOptions { WriteIndented = true });
     await File.WriteAllTextAsync(filePath, json);
@@ -50,7 +50,7 @@ async Task SaveToJsonFile<T>(string filePath, T data)
 
 async Task SaveToJsonFileWithId<T>(string filePath, T data, Func<List<T>, int> getId)
 {
-    var currentData = await ReadJsonFile<T>(filePath);
+    var currentData = await ReadJsonFile(filePath, new List<T>());
     var newId = currentData.Any() ? getId(currentData) + 1 : 1;
     var idProperty = typeof(T).GetProperty("Id");
     if (idProperty != null)
@@ -77,3 +77,4 @@ class Uczestnik
     public string? Nazwisko { get; set; }
     public string? Email { get; set; }
 }
+
