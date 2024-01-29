@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Kursów</title>
+    <title>Kursy</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,7 +42,7 @@
     </style>
 </head>
 <body>
-    <h1>API Kursów</h1>
+    <h1>Zapisz się na kurs</h1>
     <button id="loadCourses">Załaduj Kursy</button>
     <div id="courses"></div>
 
@@ -125,10 +125,10 @@
             })
             .then(response => {
                 if (response.ok) {
-                    alert('Zostałeś zapisany na kurs!');
+                    alert('Zapisałeś się na kurs na kurs!');
                     document.getElementById('enrollmentForm').style.display = 'none';
                 } else {
-                    alert('Wystąpił błąd podczas zapisu na kurs.');
+                    alert('Wystąpił błąd.');
                 }
             });
         });
