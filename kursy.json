@@ -1,0 +1,17 @@
+[
+    {
+        "Id": 1,
+        "Nazwa": "Wprowadzenie do programowania",
+        "Opis": "Podstawy języków programowania."
+    },
+    {
+        "Id": 2,
+        "Nazwa": "Zaawansowany C#",
+        "Opis": "Kurs dla zaawansowanych programistów C#."
+    },
+    {
+        "Id": 3,
+        "Nazwa": "Web Development",
+        "Opis": "Tworzenie nowoczesnych stron internetowych."
+    }
+]
