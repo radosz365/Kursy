@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -19,12 +20,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 
-app.MapGet("/", async () =>
-{
-    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html");
-    var htmlContent = await File.ReadAllTextAsync(filePath);
-    return htmlContent;
-});
+app.MapGet("/", () => "Witaj w API Kursów!");
 
 app.MapGet("/kursy", async () => await ReadJsonFile<Kurs>("kursy.json"));
 app.MapPost("/kursy", async (Kurs kurs) => await SaveToJsonFile("kursy.json", kurs));
@@ -69,15 +65,15 @@ async Task SaveToJsonFileWithId<T>(string filePath, T data, Func<List<T>, int> g
 class Kurs
 {
     public int Id { get; set; }
-    public string Nazwa { get; set; }
-    public string Opis { get; set; }
+    public string? Nazwa { get; set; }
+    public string? Opis { get; set; }
 }
 
 class Uczestnik
 {
     public int Id { get; set; }
     public int KursId { get; set; }
-    public string Imie { get; set; }
-    public string Nazwisko { get; set; }
-    public string Email { get; set; }
+    public string? Imie { get; set; }
+    public string? Nazwisko { get; set; }
+    public string? Email { get; set; }
 }
