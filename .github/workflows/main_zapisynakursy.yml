@@ -54,4 +54,4 @@ jobs:
           app-name: 'ZapisyNaKursy'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1391BEB9AE9249DFBE19E588E5878786 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6AD630A3365E4EC099D921E1AC2E8F56 }}
