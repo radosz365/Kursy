@@ -1,17 +1,17 @@
 [
     {
         "Id": 1,
-        "Nazwa": "Wprowadzenie do programowania",
-        "Opis": "Podstawy języków programowania."
+        "Nazwa": "Kurs 1",
+        "Opis": "Opis kursu 1."
     },
     {
         "Id": 2,
-        "Nazwa": "Zaawansowany C#",
-        "Opis": "Kurs dla zaawansowanych programistów C#."
+        "Nazwa": "Kurs 2",
+        "Opis": "Opis kursu 2."
     },
     {
         "Id": 3,
-        "Nazwa": "Web Development",
-        "Opis": "Tworzenie nowoczesnych stron internetowych."
+        "Nazwa": "Kurs 3",
+        "Opis": "Opis kursu 3."
     }
 ]
