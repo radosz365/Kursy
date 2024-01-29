@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Kursów</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            text-align: center;
+        }
+        #courses, #enrollmentForm, #participants {
+            margin: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        input[type="text"], input[type="email"] {
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 4px;
+        }
+        #participantsList {
+            list-style-type: none;
+            padding: 0;
+        }
+        #participantsList li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>API Kursów</h1>
+    <button id="loadCourses">Załaduj Kursy</button>
+    <div id="courses"></div>
+
+
+    <div id="enrollmentForm" style="display:none;">
+        <h2>Zapisz się na kurs</h2>
+        <form id="enrollForm">
+            <input type="hidden" id="courseId" name="courseId">
+            <input type="text" id="firstName" name="firstName" placeholder="Imię" required>
+            <input type="text" id="lastName" name="lastName" placeholder="Nazwisko" required>
+            <input type="email" id="email" name="email" placeholder="Email" required>
+            <button type="submit">Zapisz się</button>
+        </form>
+    </div>
+
+  
+    <div id="participants" style="display:none;">
+        <h2>Uczestnicy kursu</h2>
+        <ul id="participantsList"></ul>
+    </div>
+
+    <script>
+        document.getElementById('loadCourses').addEventListener('click', () => {
+            fetch('http://localhost:5050/kursy')
+                .then(response => response.json())
+                .then(data => {
+                    const coursesDiv = document.getElementById('courses');
+                    coursesDiv.innerHTML = '<h2>Kursy:</h2>';
+                    data.forEach(course => {
+                        coursesDiv.innerHTML += `<p>${course.nazwa}: ${course.opis} <button onclick="enroll(${course.id})">Zapisz się</button> <button onclick="toggleParticipants(${course.id})">Uczestnicy</button></p>`;
+                    });
+                });
+        });
+    
+        function enroll(courseId) {
+            const enrollmentForm = document.getElementById('enrollmentForm');
+            const isDisplayed = enrollmentForm.style.display === 'block';
+            if (isDisplayed) {
+                enrollmentForm.style.display = 'none';
+            } else {
+                document.getElementById('courseId').value = courseId;
+                enrollmentForm.style.display = 'block';
+            }
+        }
+    
+        function toggleParticipants(courseId) {
+            const participantsDiv = document.getElementById('participants');
+            const isDisplayed = participantsDiv.style.display === 'block';
+            if (isDisplayed) {
+                participantsDiv.style.display = 'none';
+            } else {
+                showParticipants(courseId);
+            }
+        }
+    
+        function showParticipants(courseId) {
+        fetch(`http://localhost:5050/uczestnicy?kursId=${courseId}`)
+        .then(response => response.json())
+        .then(data => {
+            const participantsList = document.getElementById('participantsList');
+            participantsList.innerHTML = '';
+            data.forEach(participant => {
+                participantsList.innerHTML += `<li>${participant.imie} ${participant.nazwisko} - ${participant.email}</li>`;
+            });
+            document.getElementById('participants').style.display = 'block';
+        });
+        }
+    
+        document.getElementById('enrollForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const courseId = document.getElementById('courseId').value;
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+    
+            fetch('http://localhost:5050/uczestnicy', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ KursId: courseId, Imie: firstName, Nazwisko: lastName, Email: email })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Zostałeś zapisany na kurs!');
+                    document.getElementById('enrollmentForm').style.display = 'none';
+                } else {
+                    alert('Wystąpił błąd podczas zapisu na kurs.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
