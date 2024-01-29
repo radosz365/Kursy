@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -18,9 +19,13 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/error");
 }
 
+var rewriteOptions = new RewriteOptions()
+    .AddRedirect("^$", "index.html");
+app.UseRewriter(rewriteOptions);
+
 app.UseStaticFiles();
 
-app.MapGet("/index.html", () => "");
+app.MapGet("/", () => "Witaj!");
 
 app.MapGet("/kursy", async () => await ReadJsonFile("kursy.json", new List<Kurs>()));
 app.MapPost("/kursy", async (Kurs kurs) => await SaveToJsonFile("kursy.json", kurs));
