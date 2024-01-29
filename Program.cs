@@ -29,7 +29,15 @@ app.MapGet("/", () => "Witaj!");
 
 app.MapGet("/kursy", async () => await ReadJsonFile("kursy.json", new List<Kurs>()));
 app.MapPost("/kursy", async (Kurs kurs) => await SaveToJsonFile("kursy.json", kurs));
-app.MapGet("/uczestnicy", async () => await ReadJsonFile("uczestnicy.json", new List<Uczestnik>()));
+app.MapGet("/uczestnicy", async (int? kursId) => 
+{
+    var uczestnicy = await ReadJsonFile("uczestnicy.json", new List<Uczestnik>());
+    if (kursId.HasValue)
+    {
+        uczestnicy = uczestnicy.Where(u => u.KursId == kursId.Value).ToList();
+    }
+    return uczestnicy;
+});
 app.MapPost("/uczestnicy", async (Uczestnik uczestnik) => await SaveToJsonFileWithId("uczestnicy.json", uczestnik, currentData => currentData.Max(u => u.Id)));
 
 app.Run();
