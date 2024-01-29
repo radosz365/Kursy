@@ -1,0 +1,56 @@
+name: ZapisyNaKursy
+
+# Definicja środowiska
+environment:
+  sdk: '8.0'
+
+# Skrypty budowania i uruchamiania aplikacji
+jobs:
+  build:
+    # Ustawienia budowania
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.x'
+
+    - name: Build the app
+      run: dotnet build --configuration Release
+
+    - name: Test the app
+      run: dotnet test
+
+    - name: Publish the app
+      run: dotnet publish --configuration Release --output ./publish
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: app
+        path: ./publish
+
+  deploy:
+    # Ustawienia wdrożenia
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: app
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.x'
+
+    - name: Deploy the app
+      run: dotnet ./publish/RezerwacjeKursowAPI.dll
