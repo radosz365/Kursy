@@ -46,7 +46,6 @@
     <button id="loadCourses">Załaduj Kursy</button>
     <div id="courses"></div>
 
-
     <div id="enrollmentForm" style="display:none;">
         <h2>Zapisz się na kurs</h2>
         <form id="enrollForm">
@@ -58,7 +57,6 @@
         </form>
     </div>
 
-  
     <div id="participants" style="display:none;">
         <h2>Uczestnicy kursu</h2>
         <ul id="participantsList"></ul>
@@ -76,7 +74,7 @@
                     });
                 });
         });
-    
+
         function enroll(courseId) {
             const enrollmentForm = document.getElementById('enrollmentForm');
             const isDisplayed = enrollmentForm.style.display === 'block';
@@ -87,7 +85,7 @@
                 enrollmentForm.style.display = 'block';
             }
         }
-    
+
         function toggleParticipants(courseId) {
             const participantsDiv = document.getElementById('participants');
             const isDisplayed = participantsDiv.style.display === 'block';
@@ -97,28 +95,28 @@
                 showParticipants(courseId);
             }
         }
-    
+
         function showParticipants(courseId) {
-        fetch(`http://localhost:5050/uczestnicy?kursId=${courseId}`)
-        .then(response => response.json())
-        .then(data => {
-            const participantsList = document.getElementById('participantsList');
-            participantsList.innerHTML = '';
-            data.forEach(participant => {
-                participantsList.innerHTML += `<li>${participant.imie} ${participant.nazwisko} - ${participant.email}</li>`;
-            });
-            document.getElementById('participants').style.display = 'block';
-        });
+            fetch(`/uczestnicy?kursId=${courseId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const participantsList = document.getElementById('participantsList');
+                    participantsList.innerHTML = '';
+                    data.forEach(participant => {
+                        participantsList.innerHTML += `<li>${participant.imie} ${participant.nazwisko} - ${participant.email}</li>`;
+                    });
+                    document.getElementById('participants').style.display = 'block';
+                });
         }
-    
+
         document.getElementById('enrollForm').addEventListener('submit', function(event) {
             event.preventDefault();
             const courseId = document.getElementById('courseId').value;
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
             const email = document.getElementById('email').value;
-    
-            fetch('http://localhost:5050/uczestnicy', {
+
+            fetch('/uczestnicy', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
