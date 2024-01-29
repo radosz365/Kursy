@@ -1,6 +1,6 @@
-@ZapisyNaKursy_HostAddress = http://localhost:5050
+@ProjektS_HostAddress = http://localhost:5050
 
-GET {{ZapisyNaKursy_HostAddress}}/index.html/
+GET {{ProjektS_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
