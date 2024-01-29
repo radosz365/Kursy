@@ -20,7 +20,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 
-app.MapGet("/", () => "Witaj w API Kursów!");
+app.MapGet("/index.html", () => "");
 
 app.MapGet("/kursy", async () => await ReadJsonFile("kursy.json", new List<Kurs>()));
 app.MapPost("/kursy", async (Kurs kurs) => await SaveToJsonFile("kursy.json", kurs));
